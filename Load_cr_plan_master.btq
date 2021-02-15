@@ -1,0 +1,16 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+INSERT INTO cr_slipstream_telecom.cr_plan_master
+SELECT Plan_type, 
+	Plan_Des,
+   	Data_rate_per_kb,
+	free_voice_min,
+	free_sms,
+	rate_per_min,
+	sms_rate,
+	CURRENT_DATE
+FROM stg_slipstream_telecom.stg_plan_master;
+
+.LOGOFF;
+
+

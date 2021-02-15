@@ -1,0 +1,16 @@
+.LOGON 192.168.112.128/Sysdba,learning;
+insert into stg_slipstream_telecom.stg_plan_master
+SELECT  Plan_type, 
+	Plan_Des,
+	CAST(Data_rate_per_kb AS DECIMAL(4,2)),
+	CAST(free_voice_min AS NUMBER(10)),
+	CAST(CASE 
+		WHEN free_sms='NULL' THEN null
+		ELSE free_sms
+	     END	
+	AS INT),
+	CAST(rate_per_min AS DECIMAL(4,2)),
+	CAST(sms_rate AS DECIMAL(4,2))
+FROM lnd_slipstream_telecom.lnd_plan_master;
+
+.LOGOFF

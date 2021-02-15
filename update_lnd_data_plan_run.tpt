@@ -1,0 +1,54 @@
+DEFINE JOB update_lnd_data_plan_run
+DESCRIPTION 'Load landing table'
+(
+DEFINE SCHEMA lnd_data_plan_run_Schema
+(
+subscriber_id VARCHAR(10),
+plan_type VARCHAR(15),
+data_consumed VARCHAR(10),
+load_date VARCHAR(15)
+);
+/*FROM TABLE 'lnd_slipstream_telecom.lnd_data_plan_run';*/
+DEFINE OPERATOR File_Reader
+TYPE DATACONNECTOR PRODUCER
+SCHEMA lnd_data_plan_run_Schema
+ATTRIBUTES
+( 
+VARCHAR FileName = @FileName,
+VARCHAR Format = 'DELIMITED',
+VARCHAR OpenMode = 'Read',
+VARCHAR IndicatorMode = 'N',
+VARCHAR TextDelimiter = ',',
+VARCHAR AcceptExcessColumns = 'Y',
+VARCHAR DeleteTask   = 'N',
+VARCHAR AcceptMissingColumns = 'Y',
+VARCHAR SkipRowsEveryFile = 'Y',
+INTEGER SkipRows = 1
+);
+
+DEFINE OPERATOR update_lnd_data_plan_run
+TYPE UPDATE
+SCHEMA lnd_data_plan_run_Schema
+ATTRIBUTES
+( VARCHAR UserName = 'sysdba',
+VARCHAR UserPassword = 'learning',
+VARCHAR Tdpid = '192.168.112.128',
+VARCHAR LogTable = 'stg_Loyalty_RL',
+VARCHAR TargetTable = 'lnd_slipstream_telecom.lnd_data_plan_run',
+INTEGER MaxSessions = 8,
+INTEGER TenacitySleep = 1,
+VARCHAR WildCardInsert = 'Y' /*Not default*/
+);
+
+
+
+
+
+APPLY 
+	('INSERT INTO lnd_slipstream_telecom.lnd_data_plan_run
+	(subscriber_id,plan_type,data_consumed,load_date) VALUES(:subscriber_id,:plan_type,:data_consumed,:load_date);'
+       )
+	TO OPERATOR (update_lnd_data_plan_run[1])
+	SELECT * FROM OPERATOR (File_Reader[1]);
+
+);

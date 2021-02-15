@@ -1,0 +1,5 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+EXEC delete_data_plan_run;
+
+.LOGOFF;

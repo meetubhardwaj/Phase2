@@ -1,0 +1,6 @@
+
+.LOGON 192.168.112.128/sysdba,learning;
+
+EXEC delete_voice_plan_run;
+
+.LOGOFF;

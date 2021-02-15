@@ -1,0 +1,7 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+INSERT INTO cr_slipstream_telecom.cr_cust_profile(subscriber_id,user_id,gender,status,date_of_birth,address,state_cd,PIN,Deactivated,Defaulter,run_date)
+SELECT subscriber_id,user_id,gender,status,date_of_birth,address,state_cd,PIN,Deactivated,Defaulter,CURRENT_DATE
+FROM stg_slipstream_telecom.stg_cust_profile;
+
+.LOGOFF

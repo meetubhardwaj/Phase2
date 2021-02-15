@@ -1,0 +1,34 @@
+.LOGON 192.168.112.128/Sysdba,learning;
+
+insert into stg_slipstream_telecom.stg_loyalty
+select subscriber_id(NUMBER(10)), 
+	user_id(VARCHAR(30)),
+	 CASE
+	   WHEN loyalty_badge='SLVR' THEN 'Silver'
+	   WHEN loyalty_badge='BRNZ' THEN 'Bronze'
+	   WHEN loyalty_badge='GOLD' THEN 'Gold'
+	   WHEN loyalty_badge='PLAT' THEN 'Platinum'
+	 END,
+	 CAST(loyalty_spent AS INT),
+	 CAST(loyalty_accrue AS INT),
+	 CAST(
+		CASE
+		WHEN  substr(Reg_date_time,3,1)      =  '/'   and  substr(Reg_date_time,5,1) = '/'  THEN SUBSTR (Reg_date_time,1,3) || '0' || substr(Reg_date_time,4,7)
+  		WHEN  substr(Reg_date_time,2,1)       = '/'   and  substr(Reg_date_time,4,1) = '/'  THEN '0' || SUBSTR (Reg_date_time,1,2) || '0' || substr(Reg_date_time,3,7)
+ 		WHEN  substr(Reg_date_time,2,1)       = '/'   and  substr(Reg_date_time,4,1) <>  '/'  THEN '0' || SUBSTR (Reg_date_time,1,9)
+  		WHEN  substr(Reg_date_time,2,1)       <>  '/'   and  substr(Reg_date_time,4,1) =   '/'  THEN   SUBSTR (Reg_date_time,1,3)  || '0' || substr(Reg_date_time,4,6)
+		ELSE  substr(Reg_date_time,1,10)  
+                end
+		 AS DATE FORMAT 'MM/DD/YYYY'),
+	 CAST(currentDate AS DATE FORMAT 'MM/DD/YYYY'),
+         'N'
+FROM lnd_slipstream_telecom.lnd_loyalty;
+
+
+UPDATE stg_slipstream_telecom.stg_loyalty SET Error_records = 'Y' 
+WHERE stg_loyalty.subscriber_id 
+NOT IN (SELECT subscriber_id FROM stg_slipstream_telecom.stg_cust_profile);
+
+
+
+.LOGOFF

@@ -1,0 +1,36 @@
+.LOGON 192.168.112.128/Sysdba,learning;
+
+insert into stg_slipstream_telecom.stg_cust_profile
+select CAST(Subscriber_id AS NUMBER(10)),
+	 User_id,
+	 Gender,
+	 Status,
+	 CAST(CASE
+		WHEN  substr(date_of_birth,3,1)      =  '/'   and  substr(date_of_birth,5,1) = '/'  THEN SUBSTR (date_of_birth,1,3) || '0' || substr(date_of_birth,4,7)
+  		WHEN  substr(date_of_birth,2,1)       = '/'   and  substr(date_of_birth,4,1) = '/'  THEN '0' || SUBSTR (date_of_birth,1,2) || '0' || substr(date_of_birth,3,7)
+ 		WHEN  substr(date_of_birth,2,1)       = '/'   and  substr(date_of_birth,4,1) <>  '/'  THEN '0' || SUBSTR (date_of_birth,1,9)
+  		WHEN  substr(date_of_birth,2,1)       <>  '/'   and  substr(date_of_birth,4,1) =   '/'  THEN   SUBSTR (date_of_birth,1,3)  || '0' || substr(date_of_birth,4,6)
+		ELSE  substr(date_of_birth,1,10)  
+		end
+	 as date format 'mm-dd-yyyy'),
+	 REGEXP_REPLACE(address,'[A-Z]{2}|[0-9]{5}|,|š',''),
+	 REGEXP_SUBSTR(address,'[A-Z]{2}',1,1,'c'),
+	 cast(REGEXP_SUBSTR(address,'[0-9]{5}',1,1,'c') AS NUMBER(5)),
+	'N',
+	'N'
+       FROM lnd_slipstream_telecom.lnd_cust_profile;
+
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET Deactivated = 'Y' 
+WHERE  stg_cust_profile.subscriber_id 
+NOT IN (SELECT subscriber_id FROM stg_slipstream_telecom.stg_cust_stats);
+
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET Defaulter = 'Y' 
+WHERE stg_cust_stats.paid_date < TRUNC( current_date,'RM') + 9 - INTERVAL '01' MONTH
+AND stg_cust_profile.subscriber_id = stg_slipstream_telecom.stg_cust_stats.subscriber_id;
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET address = REGEXP_REPLACE(address,'š','/b');
+
+.LOGOFF
+

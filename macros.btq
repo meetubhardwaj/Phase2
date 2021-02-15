@@ -1,0 +1,42 @@
+
+.LOGON 192.168.112.128/sysdba,learning;
+
+CREATE MACRO delete_data_plan_run AS ( 
+   DELETE FROM lnd_slipstream_telecom.lnd_data_plan_run; 
+);
+
+
+
+CREATE MACRO delete_voice_plan_run AS ( 
+   DELETE FROM lnd_slipstream_telecom.lnd_voice_plan_run; 
+);
+
+
+CREATE MACRO Deactivated_users AS 
+(
+	SELECT subscriber_id,user_id,status,gender,date_of_birth,Deactivated
+	FROM cr_slipstream_telecom.cr_cust_profile
+	WHERE Deactivated = 'Y';
+);
+
+
+CREATE MACRO Defaulters AS
+(
+	SELECT subscriber_id,user_id,status,gender,date_of_birth,Defaulter
+	FROM cr_slipstream_telecom.cr_cust_profile
+	WHERE Defaulter = 'Y'; 
+);
+
+
+CREATE MACRO Error_records AS
+(
+	SELECT * FROM cr_slipstream_telecom.cr_loyalty 
+	WHERE Error_records = 'Y';
+);
+
+CREATE MACRO bill AS
+(
+	SELECT * FROM cr_slipstream_telecom.cr_bill;
+);
+
+.LOGOFF

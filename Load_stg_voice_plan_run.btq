@@ -1,0 +1,24 @@
+.LOGON 192.168.112.128/Sysdba,learning;
+
+
+DELETE FROM stg_slipstream_telecom.stg_voice_plan_run;
+
+insert into stg_slipstream_telecom.stg_voice_plan_run
+SELECT  CAST(subscriber_id AS NUMBER(10)), 
+	 Plan_Type,
+	 voice_time * CAST( INTERVAL '1' minute AS INTERVAL hour TO second(0)),
+	 CAST(sms_used AS INT),
+	 CAST(
+  		CASE
+		WHEN  substr(load_date,3,1)      =  '/'   and  substr(load_date,5,1) = '/'  THEN SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+  		WHEN  substr(load_date,2,1)       = '/'   and  substr(load_date,4,1) = '/'  THEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+ 		WHEN  substr(load_date,2,1)       = '/'   and  substr(load_date,4,1) <>  '/'  THEN '0' || SUBSTR (load_date,1,9)
+  		WHEN  substr(load_date,2,1)       <>  '/'   and  substr(load_date,4,1) =   '/'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+		ELSE  substr(load_date,1,10)  
+                end
+		as date format 'mm-dd-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_voice_plan_run;
+
+
+.LOGOFF
+

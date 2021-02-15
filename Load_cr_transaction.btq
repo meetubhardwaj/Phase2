@@ -1,0 +1,16 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+INSERT INTO cr_slipstream_telecom.cr_transaction ( subscriber_id, plan_type, data_consumed, voice_time, sms_used, load_date,run_date)
+SELECT coalesce(d.subscriber_id,v.subscriber_id),
+coalesce(d.plan_type,v.plan_type),
+coalesce(d.data_consumed,0),
+coalesce(v.voice_time,0),
+coalesce(v.sms_used,0),
+coalesce(d.load_date,v.load_date),
+current_date
+FROM stg_slipstream_telecom.stg_data_plan_run d
+full outer JOIN stg_slipstream_telecom.stg_voice_plan_run v ON d.subscriber_id = v.subscriber_id
+and d.load_date = v.load_date;
+
+.LOGOFF;
+

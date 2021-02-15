@@ -1,0 +1,38 @@
+DEFINE JOB Load_lnd_Loyalty
+DESCRIPTION 'Load staging loyalty table'
+(
+DEFINE SCHEMA lnd_Loyalty_Schema
+FROM TABLE 'lnd_slipstream_telecom.lnd_loyalty';
+DEFINE OPERATOR File_Reader
+TYPE DATACONNECTOR PRODUCER
+SCHEMA lnd_Loyalty_Schema
+ATTRIBUTES
+( VARCHAR FileName = 'Loyalty_file.csv',
+VARCHAR Format = 'DELIMITED',
+VARCHAR TextDelimiter = ',',
+VARCHAR OpenMode = 'Read',
+VARCHAR IndicatorMode = 'N',
+VARCHAR AcceptExcessColumns = 'Y',
+VARCHAR AcceptMissingColumns = 'Y',
+INTEGER SkipRows = 1
+);
+
+ 
+
+DEFINE OPERATOR Load_lnd_Loyalty
+TYPE LOAD
+SCHEMA lnd_Loyalty_Schema
+ATTRIBUTES
+( VARCHAR UserName = 'sysdba',
+VARCHAR UserPassword = 'learning',
+VARCHAR Tdpid = '192.168.112.128',
+VARCHAR LogTable = 'stg_Loyalty_RL',
+VARCHAR TargetTable = 'lnd_slipstream_telecom.lnd_loyalty',
+INTEGER MaxSessions = 8,
+INTEGER TenacitySleep = 1,
+VARCHAR WildCardInsert = 'Y' /*Not default*/
+);
+APPLY ('INSERT INTO lnd_slipstream_telecom.lnd_Loyalty;')
+TO OPERATOR (Load_lnd_Loyalty[1])
+SELECT * FROM OPERATOR (File_Reader[1]);
+);

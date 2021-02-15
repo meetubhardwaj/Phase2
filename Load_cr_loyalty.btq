@@ -1,0 +1,8 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+INSERT INTO cr_slipstream_telecom.cr_loyalty
+SELECT subscriber_id,user_id,loyalty_badge,loyalty_spent,loyalty_accrue,reg_date_time,currentDate,Error_records,CURRENT_DATE 
+FROM stg_slipstream_telecom.stg_loyalty;
+
+.LOGOFF
+

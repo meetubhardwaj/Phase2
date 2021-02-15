@@ -1,0 +1,18 @@
+.LOGON 192.168.112.128/Sysdba,learning;
+
+insert into stg_slipstream_telecom.stg_cust_stats
+select 
+       CAST(subscriber_id AS NUMBER(10)),
+       CAST(CASE
+		WHEN  substr(paid_date,3,1)      =  '/'   and  substr(paid_date,5,1) = '/'  THEN SUBSTR (paid_date,1,3) || '0' || substr(paid_date,4,7)
+  		WHEN  substr(paid_date,2,1)       = '/'   and  substr(paid_date,4,1) = '/'  THEN '0' || SUBSTR (paid_date,1,2) || '0' || substr(paid_date,3,7)
+ 		WHEN  substr(paid_date,2,1)       = '/'   and  substr(paid_date,4,1) <>  '/'  THEN '0' || SUBSTR (paid_date,1,9)
+  		WHEN  substr(paid_date,2,1)       <>  '/'   and  substr(paid_date,4,1) =   '/'  THEN   SUBSTR (paid_date,1,3)  || '0' || substr(paid_date,4,6)
+		ELSE  substr(paid_date,1,10)
+	    END
+	AS DATE FORMAT 'mm-dd-yyyy')
+FROM lnd_slipstream_telecom.lnd_cust_stats;
+
+
+.LOGOFF
+

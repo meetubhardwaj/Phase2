@@ -1,0 +1,39 @@
+DEFINE JOB Load_lnd_cust_profile
+DESCRIPTION 'Load staging table'
+(
+DEFINE SCHEMA lnd_cust_profile_Schema
+FROM TABLE 'lnd_slipstream_telecom.lnd_cust_profile';
+DEFINE OPERATOR File_Reader
+TYPE DATACONNECTOR PRODUCER
+SCHEMA lnd_cust_profile_Schema
+ATTRIBUTES
+( VARCHAR FileName = 'cust_prfl.csv',
+VARCHAR Format = 'DELIMITED',
+VARCHAR OpenMode = 'Read',
+VARCHAR IndicatorMode = 'N',
+VARCHAR TextDelimiter = ',',
+VARCHAR QuotedData   =  'Optional',
+VARCHAR CloseQuoteMark =   '"',
+VARCHAR OpenQuoteMark  =   '"',
+VARCHAR UnicodePassThrough = 'ON',
+VARCHAR TrimChar = '',
+INTEGER SkipRows = 1
+);
+
+DEFINE OPERATOR Load_lnd_cust_profile
+TYPE LOAD
+SCHEMA lnd_cust_profile_Schema
+ATTRIBUTES
+( VARCHAR UserName = 'sysdba',
+VARCHAR UserPassword = 'learning',
+VARCHAR Tdpid = '192.168.112.128',
+VARCHAR LogTable = 'stg_Loyalty_RL',
+VARCHAR TargetTable = 'lnd_slipstream_telecom.lnd_cust_profile',
+INTEGER MaxSessions = 8,
+INTEGER TenacitySleep = 1,
+VARCHAR WildCardInsert = 'Y' /*Not default*/
+);
+APPLY ('INSERT INTO lnd_slipstream_telecom.lnd_cust_profile;')
+TO OPERATOR (Load_lnd_cust_profile[1])
+SELECT * FROM OPERATOR (File_Reader[1]);
+);

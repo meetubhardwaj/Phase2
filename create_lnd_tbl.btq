@@ -1,0 +1,399 @@
+.LOGON 192.168.112.128/sysdba,learning;
+
+
+
+*==========================================================*
+*							   *
+*        SETTING DATABASE                                  *
+*                                                          *
+*==========================================================*
+
+
+CREATE DATABASE "lnd_slipstream_telecom" FROM "Sysdba" AS
+	PERMANENT = 52428800,
+	SPOOL = 52428800,
+	TEMPORARY = 100000000,
+	ACCOUNT = '$M00EDUC&D&H',
+	FALLBACK PROTECTION,
+	NO BEFORE JOURNAL,
+	NO AFTER JOURNAL;
+
+
+CREATE DATABASE "stg_slipstream_telecom" FROM "Sysdba" AS
+	PERMANENT = 52428800,
+	SPOOL = 52428800,
+	TEMPORARY = 100000000,
+	ACCOUNT = '$M00EDUC&D&H',
+	FALLBACK PROTECTION,
+	NO BEFORE JOURNAL,
+	NO AFTER JOURNAL;
+
+
+CREATE DATABASE "cr_slipstream_telecom" FROM "Sysdba" AS
+	PERMANENT = 52428800,
+	SPOOL = 52428800,
+	TEMPORARY = 100000000,
+	ACCOUNT = '$M00EDUC&D&H',
+	FALLBACK PROTECTION,
+	NO BEFORE JOURNAL,
+	NO AFTER JOURNAL;
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+      paid_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC NOT NULL
+     )
+NO PRIMARY INDEX;
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = NONE,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) NOT NULL,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+      gender VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth VARCHAR(15) NOT NULL,
+      address VARCHAR(80) CHARACTER SET LATIN CASESPECIFIC
+     )
+NO PRIMARY INDEX;
+
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      free_voice_min VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      free_sms VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      rate_per_min VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      sms_rate VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC
+     )
+NO PRIMARY INDEX ;
+
+
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) NOT NULL,
+      User_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+      loyalty_badge VARCHAR(10) NOT NULL,
+      Loyalty_spent VARCHAR(5) NOT NULL,
+      Loyalty_accrue VARCHAR(5) NOT NULL,
+      reg_date_time VARCHAR(15) NOT NULL,
+      currentDate VARCHAR(10) NOT NULL
+     )
+NO PRIMARY INDEX ;
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_voice_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      plan_type VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      voice_time VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      Load_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC
+     )
+PRIMARY INDEX (subscriber_id);
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_data_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      load_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC
+     )
+PRIMARY INDEX(subscriber_id) ;
+
+
+
+
+
+
+
+*staging layer*
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(35) CHARACTER SET LATIN CASESPECIFIC,
+      gender VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth DATE FORMAT 'YY/MM/DD',
+      address VARCHAR(70) CHARACTER SET LATIN CASESPECIFIC,
+      state_cd VARCHAR(2) CHARACTER SET LATIN CASESPECIFIC,
+      PIN NUMBER(5,0),
+	Deactivated VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      Defaulter VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC)
+NO PRIMARY INDEX ;
+
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      paid_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      loyalty_badge VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      Loyalty_spent INTEGER,
+      loyalty_accrue INTEGER,
+      reg_date_time DATE FORMAT 'MM/DD/YYYY',
+      currentDate DATE FORMAT 'MM/DD/YYYY',
+      Error_records CHAR(1) CHARACTER SET LATIN CASESPECIFIC)
+NO PRIMARY INDEX ;
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb DECIMAL(4,2),
+      free_voice_min NUMBER,
+      free_sms INTEGER,
+      rate_per_min DECIMAL(4,2),
+      sms_rate DECIMAL(4,2))
+NO PRIMARY INDEX ;
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_data_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_voice_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      voice_time VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+
+
+
+
+
+*CORE LAYER*
+
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER NOT NULL,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      gender VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth DATE FORMAT 'YY/MM/DD',
+      Address VARCHAR(40) CHARACTER SET LATIN CASESPECIFIC,
+      state_cd VARCHAR(2) CHARACTER SET LATIN CASESPECIFIC,
+      PIN NUMBER,
+      Deactivated VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      Defaulter VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      run_date DATE FORMAT 'YY/MM/DD')
+PRIMARY INDEX ( subscriber_id );
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      loyalty_badge VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      Loyalty_spent INTEGER,
+      loyalty_accrue INTEGER,
+      reg_date_time DATE FORMAT 'MM/DD/YYYY',
+      currentDate DATE FORMAT 'MM/DD/YYYY',
+      Error_records CHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      run_date DATE FORMAT 'DD/MM/YYYY')
+PRIMARY INDEX(subscriber_id) ;
+
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      paid_date DATE FORMAT 'YY/MM/DD',
+      run_date DATE FORMAT 'YY/MM/DD')
+ PRIMARY INDEX(subscriber_id) ;
+
+
+
+ CREATE MULTISET TABLE cr_slipstream_telecom.cr_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb DECIMAL(4,2),
+      free_voice_min NUMBER,
+      free_sms INTEGER,
+      rate_per_min DECIMAL(4,2),
+      sms_rate DECIMAL(4,2),
+      run_date DATE FORMAT 'DD/MM/YYYY')
+      PRIMARY INDEX(plan_type) ;
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_transaction ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER NOT NULL,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed NUMBER,
+      voice_time VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD',
+      run_date DATE FORMAT 'YY/MM/DD')
+PRIMARY INDEX ( subscriber_id );
+
+
+
+
+create table cr_slipstream_telecom.cr_bill(
+            subscriber_id NUMBER,
+            data_bill decimal(10,2) default 0,
+            voice_bill decimal(10,2) default 0,
+            sms_bill decimal(10,2) default 0,
+            total_bill decimal(12,2) Default 0)
+primary index( subscriber_id);
+  
+
+
+
+.LOGOFF;
+
+3:54 PM 2/15/2021

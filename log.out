@@ -1,0 +1,2446 @@
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<create_lnd_tbl.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:02:40 2021 PID: 15196
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+*==========================================================*
+*							   *
+*        SETTING DATABASE                                  *
+*                                                          *
+*==========================================================*
+
+
+CREATE DATABASE "lnd_slipstream_telecom" FROM "Sysdba" AS
+ PERMANENT = 524288000,
+ SPOOL = 524288000,
+ TEMPORARY = 1000000000,
+ ACCOUNT = '$M00EDUC&D&H',
+ FALLBACK PROTECTION,
+ NO BEFORE JOURNAL,
+ NO AFTER JOURNAL;
+
+ *** Database has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE DATABASE "stg_slipstream_telecom" FROM "Sysdba" AS
+ PERMANENT = 524288000,
+ SPOOL = 524288000,
+ TEMPORARY = 1000000000,
+ ACCOUNT = '$M00EDUC&D&H',
+ FALLBACK PROTECTION,
+ NO BEFORE JOURNAL,
+ NO AFTER JOURNAL;
+
+ *** Database has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE DATABASE "cr_slipstream_telecom" FROM "Sysdba" AS
+ PERMANENT = 524288000,
+ SPOOL = 524288000,
+ TEMPORARY = 1000000000,
+ ACCOUNT = '$M00EDUC&D&H',
+ FALLBACK PROTECTION,
+ NO BEFORE JOURNAL,
+ NO AFTER JOURNAL;
+
+ *** Database has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+
+      paid_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC NOT NULL
+     )
+NO PRIMARY INDEX;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = NONE,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) NOT NULL,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+      gender VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth VARCHAR(15) NOT NULL,
+      address VARCHAR(80) CHARACTER SET LATIN CASESPECIFIC
+     )
+NO PRIMARY INDEX;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      free_voice_min VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      free_sms VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      rate_per_min VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      sms_rate VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC,
+      monthly_charge VARCHAR(5) CHARACTER SET LATIN CASESPECIFIC
+     )
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) NOT NULL,
+      User_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC NOT NULL,
+      loyalty_badge VARCHAR(10) NOT NULL,
+      Loyalty_spent VARCHAR(5) NOT NULL,
+      Loyalty_accrue VARCHAR(5) NOT NULL,
+      reg_date_time VARCHAR(15) NOT NULL
+     )
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_voice_plan_run ,FALLBACK ,
+
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      plan_type VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      voice_time VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      Load_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC
+     )
+PRIMARY INDEX (subscriber_id);
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+CREATE MULTISET TABLE lnd_Slipstream_Telecom.lnd_data_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      load_date VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC
+     )
+PRIMARY INDEX(subscriber_id) ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+
+*staging layer*
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(35) CHARACTER SET LATIN CASESPECIFIC,
+      gender VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth DATE FORMAT 'YY/MM/DD',
+      address VARCHAR(70) CHARACTER SET LATIN CASESPECIFIC,
+      state_cd VARCHAR(2) CHARACTER SET LATIN CASESPECIFIC,
+      PIN NUMBER(5,0),
+ Deactivated VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      Defaulter VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC)
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      paid_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      loyalty_badge VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      Loyalty_spent INTEGER,
+      loyalty_accrue INTEGER,
+      reg_date_time DATE FORMAT 'DD/MM/YYYY',
+      Error_records CHAR(1) CHARACTER SET LATIN CASESPECIFIC)
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb DECIMAL(4,2),
+      free_voice_min NUMBER,
+      free_sms INTEGER,
+      rate_per_min DECIMAL(4,2),
+      sms_rate DECIMAL(4,2),
+      monthly_charges INTEGER)
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_data_plan_run ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+CREATE MULTISET TABLE stg_slipstream_telecom.stg_voice_plan_run ,FALLBACK ,
+
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      voice_time VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD')
+NO PRIMARY INDEX ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+*CORE LAYER*
+
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_cust_profile ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER NOT NULL,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      status VARCHAR(20) CHARACTER SET LATIN CASESPECIFIC,
+      gender VARCHAR(10) CHARACTER SET LATIN CASESPECIFIC,
+      date_of_birth DATE FORMAT 'YY/MM/DD',
+      Address VARCHAR(40) CHARACTER SET LATIN CASESPECIFIC,
+      state_cd VARCHAR(2) CHARACTER SET LATIN CASESPECIFIC,
+      PIN NUMBER,
+      Deactivated VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      Defaulter VARCHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+      run_date DATE FORMAT 'YY/MM/DD')
+PRIMARY INDEX ( subscriber_id );
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_loyalty ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      user_id VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      loyalty_badge VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      Loyalty_spent INTEGER,
+      loyalty_accrue INTEGER,
+      reg_date_time DATE FORMAT 'DD/MM/YYYY',
+      Error_records CHAR(1) CHARACTER SET LATIN CASESPECIFIC,
+ run_date DATE FORMAT 'DD/MM/YYYY')
+PRIMARY INDEX(subscriber_id) ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_cust_stats ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER,
+      paid_date DATE FORMAT 'YY/MM/DD',
+      run_date DATE FORMAT 'YY/MM/DD')
+ PRIMARY INDEX(subscriber_id) ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+ CREATE MULTISET TABLE cr_slipstream_telecom.cr_plan_master ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      plan_des VARCHAR(30) CHARACTER SET LATIN CASESPECIFIC,
+      data_rate_per_kb DECIMAL(4,2),
+      free_voice_min NUMBER,
+      free_sms INTEGER,
+      rate_per_min DECIMAL(4,2),
+      sms_rate DECIMAL(4,2),
+      monthly_charges INTEGER,
+      run_date DATE FORMAT 'DD/MM/YYYY')
+      PRIMARY INDEX(plan_type) ;
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE MULTISET TABLE cr_slipstream_telecom.cr_transaction ,FALLBACK ,
+     NO BEFORE JOURNAL,
+     NO AFTER JOURNAL,
+     CHECKSUM = DEFAULT,
+     DEFAULT MERGEBLOCKRATIO,
+     MAP = TD_MAP1
+     (
+      subscriber_id NUMBER NOT NULL,
+      plan_type VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      data_consumed NUMBER,
+      voice_time VARCHAR(15) CHARACTER SET LATIN CASESPECIFIC,
+      sms_used INTEGER,
+      load_date DATE FORMAT 'YY/MM/DD',
+      run_date DATE FORMAT 'YY/MM/DD')
+PRIMARY INDEX ( subscriber_id );
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+
+create table cr_slipstream_telecom.cr_bill(
+            subscriber_id NUMBER,
+            data_bill decimal(10,2) default 0,
+            voice_bill decimal(10,2) default 0,
+            sms_bill decimal(10,2) default 0,
+            total_bill decimal(12,2) Default 0)
+primary index( subscriber_id);
+
+ *** Table has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+  
+
+
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+12:15 PM 1/26/2021
+
+12:47 PM 1/26/2021
+
+21:33 26-01-2021
+
+23:32 26-01-2021
+
+22:41 12-02-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<macros.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:02:41 2021 PID: 15420
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+CREATE MACRO delete_data_plan_run AS ( 
+   DELETE FROM lnd_slipstream_telecom.lnd_data_plan_run; 
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+CREATE MACRO delete_voice_plan_run AS ( 
+   DELETE FROM lnd_slipstream_telecom.lnd_voice_plan_run; 
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE MACRO Deactivated_users AS 
+(
+ SELECT subscriber_id,user_id,status,gender,date_of_birth,Deactivated
+ FROM cr_slipstream_telecom.cr_cust_profile
+ WHERE Deactivated = 'Y';
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE MACRO Defaulters AS
+(
+ SELECT subscriber_id,user_id,status,gender,date_of_birth,Defaulter
+ FROM cr_slipstream_telecom.cr_cust_profile
+ WHERE Defaulter = 'Y'; 
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+CREATE MACRO Error_records AS
+(
+ SELECT * FROM cr_slipstream_telecom.cr_loyalty 
+ WHERE Error_records = 'Y';
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+CREATE MACRO bill AS
+(
+ SELECT * FROM cr_slipstream_telecom.cr_bill;
+);
+
+ *** Macro has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f Load_lnd_cust_profile.tpt -j Load_lnd_cust_profile 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/Load_lnd_cust_profile-185.out
+Job id is Load_lnd_cust_profile-185, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-2168-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-2168'
+Teradata Parallel Transporter Load Operator Version 16.20.00.22
+Load_lnd_cust_profile: private log not specified
+File_Reader[1]: Operator instance 1 processing file 'cust_prfl.csv'.
+Load_lnd_cust_profile: connecting sessions
+Load_lnd_cust_profile: preparing target table
+Load_lnd_cust_profile: entering Acquisition Phase
+Load_lnd_cust_profile: entering Application Phase
+Load_lnd_cust_profile: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_cust_profile'
+Load_lnd_cust_profile: Total Rows Sent To RDBMS:      601
+Load_lnd_cust_profile: Total Rows Applied:            601
+Load_lnd_cust_profile: Total Rows in Error Table 1:   0
+Load_lnd_cust_profile: Total Rows in Error Table 2:   0
+Load_lnd_cust_profile: Total Duplicate Rows:          0
+Load_lnd_cust_profile: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+Load_lnd_cust_profile: Performance metrics:
+Load_lnd_cust_profile:     MB/sec in Acquisition phase: 0.019
+Load_lnd_cust_profile:     Elapsed time from start to Acquisition phase:   2 second(s)
+Load_lnd_cust_profile:     Elapsed time in Acquisition phase:   3 second(s)
+Load_lnd_cust_profile:     Elapsed time in Application phase: < 1 second
+Load_lnd_cust_profile:     Elapsed time from Application phase to end:   1 second(s)
+Load_lnd_cust_profile: Total processor time used = '0.078125 Second(s)'
+Load_lnd_cust_profile: Start : Sat Feb 13 15:02:42 2021
+Load_lnd_cust_profile: End   : Sat Feb 13 15:02:48 2021
+Job step MAIN_STEP completed successfully
+Job Load_lnd_cust_profile completed successfully
+Job start: Sat Feb 13 15:02:42 2021
+Job end:   Sat Feb 13 15:02:48 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f Load_lnd_cust_stats.tpt -j Load_lnd_cust_stats 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/Load_lnd_cust_stats-186.out
+Job id is Load_lnd_cust_stats-186, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+Teradata Parallel Transporter Load Operator Version 16.20.00.22
+Load_lnd_cust_stats: private log not specified
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-3796-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-3796'
+File_Reader[1]: Operator instance 1 processing file 'Cust_stats.csv'.
+Load_lnd_cust_stats: connecting sessions
+Load_lnd_cust_stats: preparing target table
+Load_lnd_cust_stats: entering Acquisition Phase
+Load_lnd_cust_stats: entering Application Phase
+Load_lnd_cust_stats: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_cust_stats'
+Load_lnd_cust_stats: Total Rows Sent To RDBMS:      589
+Load_lnd_cust_stats: Total Rows Applied:            589
+Load_lnd_cust_stats: Total Rows in Error Table 1:   0
+Load_lnd_cust_stats: Total Rows in Error Table 2:   0
+Load_lnd_cust_stats: Total Duplicate Rows:          0
+Load_lnd_cust_stats: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+Load_lnd_cust_stats: Performance metrics:
+Load_lnd_cust_stats:     MB/sec in Acquisition phase: 0.005
+Load_lnd_cust_stats:     Elapsed time from start to Acquisition phase:   1 second(s)
+Load_lnd_cust_stats:     Elapsed time in Acquisition phase:   3 second(s)
+Load_lnd_cust_stats:     Elapsed time in Application phase: < 1 second
+Load_lnd_cust_stats:     Elapsed time from Application phase to end: < 1 second
+Load_lnd_cust_stats: Total processor time used = '0.140625 Second(s)'
+Load_lnd_cust_stats: Start : Sat Feb 13 15:02:49 2021
+Load_lnd_cust_stats: End   : Sat Feb 13 15:02:53 2021
+Job step MAIN_STEP completed successfully
+Job Load_lnd_cust_stats completed successfully
+Job start: Sat Feb 13 15:02:48 2021
+Job end:   Sat Feb 13 15:02:53 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f Load_lnd_Loyalty.tpt -j Load_lnd_Loyalty 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/Load_lnd_Loyalty-187.out
+Job id is Load_lnd_Loyalty-187, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+Teradata Parallel Transporter Load Operator Version 16.20.00.22
+Load_lnd_Loyalty: private log not specified
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-14240-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-14240'
+File_Reader[1]: Operator instance 1 processing file 'Loyalty_file.csv'.
+Load_lnd_Loyalty: connecting sessions
+Load_lnd_Loyalty: preparing target table
+Load_lnd_Loyalty: entering Acquisition Phase
+Load_lnd_Loyalty: entering Application Phase
+Load_lnd_Loyalty: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_loyalty'
+Load_lnd_Loyalty: Total Rows Sent To RDBMS:      600
+Load_lnd_Loyalty: Total Rows Applied:            600
+Load_lnd_Loyalty: Total Rows in Error Table 1:   0
+Load_lnd_Loyalty: Total Rows in Error Table 2:   0
+Load_lnd_Loyalty: Total Duplicate Rows:          0
+Load_lnd_Loyalty: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+Load_lnd_Loyalty: Performance metrics:
+Load_lnd_Loyalty:     MB/sec in Acquisition phase: 0.011
+Load_lnd_Loyalty:     Elapsed time from start to Acquisition phase:   7 second(s)
+Load_lnd_Loyalty:     Elapsed time in Acquisition phase:   3 second(s)
+Load_lnd_Loyalty:     Elapsed time in Application phase: < 1 second
+Load_lnd_Loyalty:     Elapsed time from Application phase to end:   1 second(s)
+Load_lnd_Loyalty: Total processor time used = '0.078125 Second(s)'
+Load_lnd_Loyalty: Start : Sat Feb 13 15:02:54 2021
+Load_lnd_Loyalty: End   : Sat Feb 13 15:03:05 2021
+Job step MAIN_STEP completed successfully
+Job Load_lnd_Loyalty completed successfully
+Job start: Sat Feb 13 15:02:54 2021
+Job end:   Sat Feb 13 15:03:05 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f Load_lnd_plan_master.tpt -j Load_lnd_plan_master 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/Load_lnd_plan_master-188.out
+Job id is Load_lnd_plan_master-188, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-12728-1'.
+Teradata Parallel Transporter Load Operator Version 16.20.00.22
+Load_lnd_plan_master: private log not specified
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-12728'
+File_Reader[1]: Operator instance 1 processing file 'plan_master.csv'.
+Load_lnd_plan_master: connecting sessions
+Load_lnd_plan_master: preparing target table
+Load_lnd_plan_master: entering Acquisition Phase
+Load_lnd_plan_master: entering Application Phase
+Load_lnd_plan_master: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_plan_master'
+Load_lnd_plan_master: Total Rows Sent To RDBMS:      4
+Load_lnd_plan_master: Total Rows Applied:            4
+Load_lnd_plan_master: Total Rows in Error Table 1:   0
+Load_lnd_plan_master: Total Rows in Error Table 2:   0
+Load_lnd_plan_master: Total Duplicate Rows:          0
+Load_lnd_plan_master: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+Load_lnd_plan_master: Performance metrics:
+Load_lnd_plan_master:     MB/sec in Acquisition phase: 0.000
+Load_lnd_plan_master:     Elapsed time from start to Acquisition phase:   1 second(s)
+Load_lnd_plan_master:     Elapsed time in Acquisition phase:   3 second(s)
+Load_lnd_plan_master:     Elapsed time in Application phase: < 1 second
+Load_lnd_plan_master:     Elapsed time from Application phase to end:   1 second(s)
+Load_lnd_plan_master: Total processor time used = '0.09375 Second(s)'
+Load_lnd_plan_master: Start : Sat Feb 13 15:03:06 2021
+Load_lnd_plan_master: End   : Sat Feb 13 15:03:11 2021
+Job step MAIN_STEP completed successfully
+Job Load_lnd_plan_master completed successfully
+Job start: Sat Feb 13 15:03:06 2021
+Job end:   Sat Feb 13 15:03:11 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_cust_stats.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:11 2021 PID: 11224
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_cust_stats
+select 
+       CAST(subscriber_id AS NUMBER(10)),
+      CAST(SUBSTR(Paid_Date,1,6)||'20'||SUBSTR(Paid_Date,7,8) AS DATE FORM
+AT 'dd-mm-yyyy')
+FROM lnd_slipstream_telecom.lnd_cust_stats;
+
+ *** Insert completed. 589 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:36 26-01-2021
+
+10:31 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_cust_profile.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:12 2021 PID: 3164
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_cust_profile
+select CAST(Subscriber_id AS NUMBER(10)),
+  User_id,
+  Gender,
+  Status,
+  CAST(LPAD(date_of_birth,10,'0') AS DATE FORMAT 'MM-DD-YYYY'),
+  REGEXP_REPLACE(address,'[A-Z]{2}|[0-9]{5}|,|š',''),
+  REGEXP_SUBSTR(address,'[A-Z]{2}',1,1,'c'),
+  cast(REGEXP_SUBSTR(address,'[0-9]{5}',1,1,'c') AS NUMBER(5)),
+ 'N',
+ 'N'
+       FROM lnd_slipstream_telecom.lnd_cust_profile;
+
+ *** Insert completed. 601 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET Deactivated = 'Y' 
+WHERE  stg_cust_profile.subscriber_id 
+NOT IN (SELECT subscriber_id FROM stg_slipstream_telecom.stg_cust_stats);
+
+ *** Update completed. 13 rows changed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET Defaulter = 'Y' 
+WHERE stg_cust_stats.paid_date < TRUNC( current_date,'RM') + 9 - INTERVAL 
+'01' MONTH
+AND stg_cust_profile.subscriber_id = stg_slipstream_telecom.stg_cust_stats
+.subscriber_id;
+
+ *** Update completed. 579 rows changed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+UPDATE stg_slipstream_telecom.stg_cust_profile SET address = REGEXP_REPLACE
+(address,'š','/b');
+
+ *** Update completed. 601 rows changed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:35 26-01-2021
+
+10:25 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_loyalty.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:12 2021 PID: 14096
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_loyalty
+select subscriber_id(NUMBER(10)), 
+ user_id(VARCHAR(30)),
+  CASE
+    WHEN loyalty_badge='SLVR' THEN 'Silver'
+    WHEN loyalty_badge='BRNZ' THEN 'Bronze'
+    WHEN loyalty_badge='GOLD' THEN 'Gold'
+    WHEN loyalty_badge='PLAT' THEN 'Platinum'
+  END,
+  CAST(loyalty_spent AS INT),
+  CAST(loyalty_accrue AS INT),
+  CAST(Reg_date_time AS DATE FORMAT 'DD/MM/YYYY'),
+         'N'
+FROM lnd_slipstream_telecom.lnd_loyalty;
+
+ *** Insert completed. 600 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+UPDATE stg_slipstream_telecom.stg_loyalty SET Error_records = 'Y' 
+WHERE stg_loyalty.subscriber_id 
+NOT IN (SELECT subscriber_id FROM stg_slipstream_telecom.stg_cust_profile)
+;
+
+ *** Update completed. One row changed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:36 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_plan_master.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:12 2021 PID: 16904
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+insert into stg_slipstream_telecom.stg_plan_master
+SELECT  Plan_type, 
+ Plan_Des,
+ CAST(Data_rate_per_kb AS DECIMAL(4,2)),
+ CAST(free_voice_min AS NUMBER(10)),
+ CAST(free_sms AS INT),
+ CAST(rate_per_min AS DECIMAL(4,2)),
+ CAST(sms_rate AS DECIMAL(4,2)),
+ CAST(monthly_charge AS INT)
+FROM lnd_slipstream_telecom.lnd_plan_master;
+
+ *** Insert completed. 4 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:18 PM 1/26/2021
+
+21:37 26-01-2021
+
+10:40 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_cust_stats.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 4588
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_cust_stats
+SELECT subscriber_id,paid_date,CURRENT_DATE
+FROM stg_slipstream_telecom.stg_cust_stats;
+
+ *** Insert completed. 589 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:58 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_cust_profile.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 3396
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_cust_profile(subscriber_id,user_id,gen
+der,status,date_of_birth,address,state_cd,PIN,Deactivated,Defaulter,run_da
+te)
+SELECT subscriber_id,user_id,gender,status,date_of_birth,address,state_cd,
+PIN,Deactivated,Defaulter,CURRENT_DATE
+FROM stg_slipstream_telecom.stg_cust_profile;
+
+ *** Insert completed. 601 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:58 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+
+23:54 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_loyalty.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 11984
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_loyalty
+SELECT subscriber_id,user_id,loyalty_badge,loyalty_spent,loyalty_accrue,re
+g_date_time,Error_records,CURRENT_DATE 
+FROM stg_slipstream_telecom.stg_loyalty;
+
+ *** Insert completed. 600 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:58 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_plan_master.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 18196
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_plan_master
+SELECT Plan_type, 
+ Plan_Des,
+    Data_rate_per_kb,
+ free_voice_min,
+ free_sms,
+ rate_per_min,
+ sms_rate,
+ monthly_charges,
+ CURRENT_DATE
+FROM stg_slipstream_telecom.stg_plan_master;
+
+ *** Insert completed. 4 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+
+10:22 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 18028
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_voice_plan_run;
+
+ *** Delete completed. No rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq   0<day1.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:13 2021 PID: 14652
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+*==============================================================================================================*
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                              DAY 1......................                                                     *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*==============================================================================================================*
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_voice_plan_run.tpt -j update_lnd_voice_plan_run -u "FileName='voice_plan_run_1.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_lnd_voice_plan_run-189.out
+Job id is update_lnd_voice_plan_run-189, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-12224-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-12224'
+File_Reader[1]: Operator instance 1 processing file 'voice_plan_run_1.csv'.
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_voice_plan_run: private log not specified
+update_lnd_voice_plan_run: connecting sessions
+update_lnd_voice_plan_run: preparing target table(s)
+update_lnd_voice_plan_run: entering DML Phase
+update_lnd_voice_plan_run: entering Acquisition Phase
+update_lnd_voice_plan_run: entering Application Phase
+update_lnd_voice_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Rows Inserted: 599
+update_lnd_voice_plan_run: Rows Updated:  0
+update_lnd_voice_plan_run: Rows Deleted:  0
+update_lnd_voice_plan_run: entering Cleanup Phase
+update_lnd_voice_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Total Rows in Error Table 1:   0
+update_lnd_voice_plan_run: Total Rows in Error Table 2:   0
+update_lnd_voice_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_voice_plan_run: Performance metrics:
+update_lnd_voice_plan_run:     MB/sec in Acquisition phase: 0.008
+update_lnd_voice_plan_run:     Elapsed time from start to Acquisition phase:   2 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Application phase:   1 second(s)
+update_lnd_voice_plan_run:     Elapsed time from Application phase to end: < 1 second
+update_lnd_voice_plan_run: Total processor time used = '0.09375 Second(s)'
+update_lnd_voice_plan_run: Start : Sat Feb 13 15:03:14 2021
+update_lnd_voice_plan_run: End   : Sat Feb 13 15:03:22 2021
+Job step MAIN_STEP completed successfully
+Job update_lnd_voice_plan_run completed successfully
+Job start: Sat Feb 13 15:03:13 2021
+Job end:   Sat Feb 13 15:03:22 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:23 2021 PID: 7620
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_voice_plan_run;
+
+ *** Delete completed. No rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_voice_plan_run
+SELECT  CAST(subscriber_id AS NUMBER(10)), 
+  Plan_Type,
+  voice_time * CAST( INTERVAL '1' minute AS INTERVAL hour TO second(0)),
+  CAST(sms_used AS INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1)      =  '-'   and  substr(load_date,5,1) = '
+-'  THEN SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) =
+ '-'  THEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) <>
+  '-'  THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1)       <>  '-'   and  substr(load_date,4,1)
+ =   '-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_voice_plan_run;
+
+ *** Insert completed. 599 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:18 PM 1/26/2021
+
+21:37 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:23 2021 PID: 2448
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_data_plan_run;
+
+ *** Delete completed. No rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+7:39 PM 1/24/2021
+
+2:57 PM 1/25/2021
+
+12:15 PM 1/26/2021
+
+21:33 26-01-2021
+
+23:52 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_data_plan_run.tpt -j update_data_plan_run -u "FileName='data_plan_run_1.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_data_plan_run-190.out
+Job id is update_data_plan_run-190, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-16504-1'.
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_data_plan_run: private log not specified
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-16504'
+File_Reader[1]: Operator instance 1 processing file 'data_plan_run_1.csv'.
+update_lnd_data_plan_run: connecting sessions
+update_lnd_data_plan_run: preparing target table(s)
+update_lnd_data_plan_run: entering DML Phase
+update_lnd_data_plan_run: entering Acquisition Phase
+update_lnd_data_plan_run: entering Application Phase
+update_lnd_data_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Rows Inserted: 599
+update_lnd_data_plan_run: Rows Updated:  0
+update_lnd_data_plan_run: Rows Deleted:  0
+update_lnd_data_plan_run: entering Cleanup Phase
+update_lnd_data_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Total Rows in Error Table 1:   0
+update_lnd_data_plan_run: Total Rows in Error Table 2:   0
+update_lnd_data_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_data_plan_run: Performance metrics:
+update_lnd_data_plan_run:     MB/sec in Acquisition phase: 0.008
+update_lnd_data_plan_run:     Elapsed time from start to Acquisition phase:   3 second(s)
+update_lnd_data_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_data_plan_run:     Elapsed time in Application phase: < 1 second
+update_lnd_data_plan_run:     Elapsed time from Application phase to end:   1 second(s)
+update_lnd_data_plan_run: Total processor time used = '0.125 Second(s)'
+update_lnd_data_plan_run: Start : Sat Feb 13 15:03:23 2021
+update_lnd_data_plan_run: End   : Sat Feb 13 15:03:32 2021
+Job step MAIN_STEP completed successfully
+Job update_data_plan_run completed successfully
+Job start: Sat Feb 13 15:03:23 2021
+Job end:   Sat Feb 13 15:03:32 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:32 2021 PID: 8240
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_data_plan_run;
+
+ *** Delete completed. No rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+insert into stg_slipstream_telecom.stg_data_plan_run
+SELECT subscriber_id(NUMBER(10)), 
+  Plan_Type,
+  data_consumed(INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1) ='-'   and  substr(load_date,5,1) = '-'  THE
+N SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) = '-' T
+HEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) <>  '-' 
+ THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1) <>  '-'   and  substr(load_date,4,1) =   '
+-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_data_plan_run;
+
+ *** Insert completed. 599 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:36 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_transaction.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:32 2021 PID: 17728
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_transaction ( subscriber_id, plan_type
+, data_consumed, voice_time, sms_used, load_date,run_date)
+SELECT coalesce(d.subscriber_id,v.subscriber_id),
+coalesce(d.plan_type,v.plan_type),
+coalesce(d.data_consumed,0),
+coalesce(v.voice_time,0),
+coalesce(v.sms_used,0),
+coalesce(d.load_date,v.load_date),
+current_date
+FROM stg_slipstream_telecom.stg_data_plan_run d
+full outer JOIN stg_slipstream_telecom.stg_voice_plan_run v ON d.subscribe
+r_id = v.subscriber_id
+and d.load_date = v.load_date;
+
+ *** Insert completed. 599 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+
+23:55 26-01-2021
+
+10:23 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:33 2021 PID: 18128
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_voice_plan_run;
+
+ *** Delete completed. 599 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<day2.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:33 2021 PID: 7824
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+*==============================================================================================================*
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                              DAY 2......................                                                     *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*==============================================================================================================*
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_voice_plan_run.tpt -j update_lnd_voice_plan_run -u "FileName='voice_plan_run_2.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_lnd_voice_plan_run-191.out
+Job id is update_lnd_voice_plan_run-191, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_voice_plan_run: private log not specified
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-14668-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-14668'
+File_Reader[1]: Operator instance 1 processing file 'voice_plan_run_2.csv'.
+update_lnd_voice_plan_run: connecting sessions
+update_lnd_voice_plan_run: preparing target table(s)
+update_lnd_voice_plan_run: entering DML Phase
+update_lnd_voice_plan_run: entering Acquisition Phase
+update_lnd_voice_plan_run: entering Application Phase
+update_lnd_voice_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Rows Inserted: 99
+update_lnd_voice_plan_run: Rows Updated:  0
+update_lnd_voice_plan_run: Rows Deleted:  0
+update_lnd_voice_plan_run: entering Cleanup Phase
+update_lnd_voice_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Total Rows in Error Table 1:   0
+update_lnd_voice_plan_run: Total Rows in Error Table 2:   0
+update_lnd_voice_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_voice_plan_run: Performance metrics:
+update_lnd_voice_plan_run:     MB/sec in Acquisition phase: 0.001
+update_lnd_voice_plan_run:     Elapsed time from start to Acquisition phase:   3 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Application phase: < 1 second
+update_lnd_voice_plan_run:     Elapsed time from Application phase to end: < 1 second
+update_lnd_voice_plan_run: Total processor time used = '0.09375 Second(s)'
+update_lnd_voice_plan_run: Start : Sat Feb 13 15:03:33 2021
+update_lnd_voice_plan_run: End   : Sat Feb 13 15:03:41 2021
+Job step MAIN_STEP completed successfully
+Job update_lnd_voice_plan_run completed successfully
+Job start: Sat Feb 13 15:03:33 2021
+Job end:   Sat Feb 13 15:03:41 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:42 2021 PID: 18256
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_voice_plan_run;
+
+ *** Delete completed. 599 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_voice_plan_run
+SELECT  CAST(subscriber_id AS NUMBER(10)), 
+  Plan_Type,
+  voice_time * CAST( INTERVAL '1' minute AS INTERVAL hour TO second(0)),
+  CAST(sms_used AS INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1)      =  '-'   and  substr(load_date,5,1) = '
+-'  THEN SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) =
+ '-'  THEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) <>
+  '-'  THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1)       <>  '-'   and  substr(load_date,4,1)
+ =   '-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_voice_plan_run;
+
+ *** Insert completed. 99 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:18 PM 1/26/2021
+
+21:37 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:42 2021 PID: 12204
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_data_plan_run;
+
+ *** Delete completed. 599 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+7:39 PM 1/24/2021
+
+2:57 PM 1/25/2021
+
+12:15 PM 1/26/2021
+
+21:33 26-01-2021
+
+23:52 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_data_plan_run.tpt -j update_data_plan_run -u "FileName='data_plan_run_2.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_data_plan_run-192.out
+Job id is update_data_plan_run-192, running on TD-3L3CM33
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-15712-1'.
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_data_plan_run: private log not specified
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-15712'
+File_Reader[1]: Operator instance 1 processing file 'data_plan_run_2.csv'.
+update_lnd_data_plan_run: connecting sessions
+update_lnd_data_plan_run: preparing target table(s)
+update_lnd_data_plan_run: entering DML Phase
+update_lnd_data_plan_run: entering Acquisition Phase
+update_lnd_data_plan_run: entering Application Phase
+update_lnd_data_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Rows Inserted: 70
+update_lnd_data_plan_run: Rows Updated:  0
+update_lnd_data_plan_run: Rows Deleted:  0
+update_lnd_data_plan_run: entering Cleanup Phase
+update_lnd_data_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Total Rows in Error Table 1:   0
+update_lnd_data_plan_run: Total Rows in Error Table 2:   0
+update_lnd_data_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_data_plan_run: Performance metrics:
+update_lnd_data_plan_run:     MB/sec in Acquisition phase: 0.001
+update_lnd_data_plan_run:     Elapsed time from start to Acquisition phase:   3 second(s)
+update_lnd_data_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_data_plan_run:     Elapsed time in Application phase: < 1 second
+update_lnd_data_plan_run:     Elapsed time from Application phase to end:   1 second(s)
+update_lnd_data_plan_run: Total processor time used = '0.09375 Second(s)'
+update_lnd_data_plan_run: Start : Sat Feb 13 15:03:42 2021
+update_lnd_data_plan_run: End   : Sat Feb 13 15:03:51 2021
+Job step MAIN_STEP completed successfully
+Job update_data_plan_run completed successfully
+Job start: Sat Feb 13 15:03:42 2021
+Job end:   Sat Feb 13 15:03:51 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:51 2021 PID: 15352
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_data_plan_run;
+
+ *** Delete completed. 599 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+insert into stg_slipstream_telecom.stg_data_plan_run
+SELECT subscriber_id(NUMBER(10)), 
+  Plan_Type,
+  data_consumed(INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1) ='-'   and  substr(load_date,5,1) = '-'  THE
+N SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) = '-' T
+HEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) <>  '-' 
+ THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1) <>  '-'   and  substr(load_date,4,1) =   '
+-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_data_plan_run;
+
+ *** Insert completed. 70 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:36 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_transaction.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:51 2021 PID: 10528
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_transaction ( subscriber_id, plan_type
+, data_consumed, voice_time, sms_used, load_date,run_date)
+SELECT coalesce(d.subscriber_id,v.subscriber_id),
+coalesce(d.plan_type,v.plan_type),
+coalesce(d.data_consumed,0),
+coalesce(v.voice_time,0),
+coalesce(v.sms_used,0),
+coalesce(d.load_date,v.load_date),
+current_date
+FROM stg_slipstream_telecom.stg_data_plan_run d
+full outer JOIN stg_slipstream_telecom.stg_voice_plan_run v ON d.subscribe
+r_id = v.subscriber_id
+and d.load_date = v.load_date;
+
+ *** Insert completed. 149 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+
+23:55 26-01-2021
+
+10:23 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:52 2021 PID: 18036
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_voice_plan_run;
+
+ *** Delete completed. 99 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<day3.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:03:52 2021 PID: 5808
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+*==============================================================================================================*
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                              DAY 3......................                                                     *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*==============================================================================================================*
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_voice_plan_run.tpt -j update_lnd_voice_plan_run -u "FileName='voice_plan_run_3.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_lnd_voice_plan_run-193.out
+Job id is update_lnd_voice_plan_run-193, running on TD-3L3CM33
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_voice_plan_run: private log not specified
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-10384-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-10384'
+File_Reader[1]: Operator instance 1 processing file 'voice_plan_run_3.csv'.
+update_lnd_voice_plan_run: connecting sessions
+update_lnd_voice_plan_run: preparing target table(s)
+update_lnd_voice_plan_run: entering DML Phase
+update_lnd_voice_plan_run: entering Acquisition Phase
+update_lnd_voice_plan_run: entering Application Phase
+update_lnd_voice_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Rows Inserted: 39
+update_lnd_voice_plan_run: Rows Updated:  0
+update_lnd_voice_plan_run: Rows Deleted:  0
+update_lnd_voice_plan_run: entering Cleanup Phase
+update_lnd_voice_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_voice_plan_run'
+update_lnd_voice_plan_run: Total Rows in Error Table 1:   0
+update_lnd_voice_plan_run: Total Rows in Error Table 2:   0
+update_lnd_voice_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_voice_plan_run: Performance metrics:
+update_lnd_voice_plan_run:     MB/sec in Acquisition phase: 0.001
+update_lnd_voice_plan_run:     Elapsed time from start to Acquisition phase:   3 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_voice_plan_run:     Elapsed time in Application phase: < 1 second
+update_lnd_voice_plan_run:     Elapsed time from Application phase to end: < 1 second
+update_lnd_voice_plan_run: Total processor time used = '0.125 Second(s)'
+update_lnd_voice_plan_run: Start : Sat Feb 13 15:03:52 2021
+update_lnd_voice_plan_run: End   : Sat Feb 13 15:04:00 2021
+Job step MAIN_STEP completed successfully
+Job update_lnd_voice_plan_run completed successfully
+Job start: Sat Feb 13 15:03:52 2021
+Job end:   Sat Feb 13 15:04:00 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_voice_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:01 2021 PID: 14084
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_voice_plan_run;
+
+ *** Delete completed. 99 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+insert into stg_slipstream_telecom.stg_voice_plan_run
+SELECT  CAST(subscriber_id AS NUMBER(10)), 
+  Plan_Type,
+  voice_time * CAST( INTERVAL '1' minute AS INTERVAL hour TO second(0)),
+  CAST(sms_used AS INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1)      =  '-'   and  substr(load_date,5,1) = '
+-'  THEN SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) =
+ '-'  THEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1)       = '-'   and  substr(load_date,4,1) <>
+  '-'  THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1)       <>  '-'   and  substr(load_date,4,1)
+ =   '-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_voice_plan_run;
+
+ *** Insert completed. 39 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:18 PM 1/26/2021
+
+21:37 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<delete_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:01 2021 PID: 17544
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+EXEC delete_data_plan_run;
+
+ *** Delete completed. 70 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+7:39 PM 1/24/2021
+
+2:57 PM 1/25/2021
+
+12:15 PM 1/26/2021
+
+21:33 26-01-2021
+
+23:52 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>tbuild -f update_lnd_data_plan_run.tpt -j update_data_plan_run -u "FileName='data_plan_run_3.csv'" 
+Teradata Parallel Transporter Version 16.20.00.22 64-Bit
+The global configuration file 'c:\program files\teradata\client\16.20\Teradata Parallel Transporter\twbcfg.ini' is used.
+Log Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs
+Checkpoint Directory: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/checkpoint
+
+Job log: C:\Program Files\Teradata\client\16.20\Teradata Parallel Transporter/logs/update_data_plan_run-194.out
+Job id is update_data_plan_run-194, running on TD-3L3CM33
+Teradata Parallel Transporter Update Operator Version 16.20.00.22
+update_lnd_data_plan_run: private log not specified
+Teradata Parallel Transporter DataConnector Operator Version 16.20.00.22
+File_Reader[1]: Instance 1 directing private log report to 'dtacop-al255036-1748-1'.
+File_Reader[1]: DataConnector Producer operator Instances: 1
+File_Reader[1]: ECI operator ID: 'File_Reader-1748'
+File_Reader[1]: Operator instance 1 processing file 'data_plan_run_3.csv'.
+update_lnd_data_plan_run: connecting sessions
+update_lnd_data_plan_run: preparing target table(s)
+update_lnd_data_plan_run: entering DML Phase
+update_lnd_data_plan_run: entering Acquisition Phase
+update_lnd_data_plan_run: entering Application Phase
+update_lnd_data_plan_run: Statistics for Target Table:  'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Rows Inserted: 60
+update_lnd_data_plan_run: Rows Updated:  0
+update_lnd_data_plan_run: Rows Deleted:  0
+update_lnd_data_plan_run: entering Cleanup Phase
+update_lnd_data_plan_run: Error Table Statistics for Target Table :   'lnd_slipstream_telecom.lnd_data_plan_run'
+update_lnd_data_plan_run: Total Rows in Error Table 1:   0
+update_lnd_data_plan_run: Total Rows in Error Table 2:   0
+update_lnd_data_plan_run: disconnecting sessions
+File_Reader[1]: Total files processed: 1.
+update_lnd_data_plan_run: Performance metrics:
+update_lnd_data_plan_run:     MB/sec in Acquisition phase: 0.001
+update_lnd_data_plan_run:     Elapsed time from start to Acquisition phase:   2 second(s)
+update_lnd_data_plan_run:     Elapsed time in Acquisition phase:   5 second(s)
+update_lnd_data_plan_run:     Elapsed time in Application phase:   1 second(s)
+update_lnd_data_plan_run:     Elapsed time from Application phase to end: < 1 second
+update_lnd_data_plan_run: Total processor time used = '0.09375 Second(s)'
+update_lnd_data_plan_run: Start : Sat Feb 13 15:04:02 2021
+update_lnd_data_plan_run: End   : Sat Feb 13 15:04:10 2021
+Job step MAIN_STEP completed successfully
+Job update_data_plan_run completed successfully
+Job start: Sat Feb 13 15:04:01 2021
+Job end:   Sat Feb 13 15:04:10 2021
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_stg_data_plan_run.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:11 2021 PID: 1200
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/Sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+DELETE FROM stg_slipstream_telecom.stg_data_plan_run;
+
+ *** Delete completed. 70 rows removed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+insert into stg_slipstream_telecom.stg_data_plan_run
+SELECT subscriber_id(NUMBER(10)), 
+  Plan_Type,
+  data_consumed(INT),
+  CAST(
+    CASE
+  WHEN  substr(load_date,3,1) ='-'   and  substr(load_date,5,1) = '-'  THE
+N SUBSTR (load_date,1,3) || '0' || substr(load_date,4,7)
+    WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) = '-' T
+HEN '0' || SUBSTR (load_date,1,2) || '0' || substr(load_date,3,7)
+   WHEN  substr(load_date,2,1) = '-'   and  substr(load_date,4,1) <>  '-' 
+ THEN '0' || SUBSTR (load_date,1,9)
+    WHEN  substr(load_date,2,1) <>  '-'   and  substr(load_date,4,1) =   '
+-'  THEN   SUBSTR (load_date,1,3)  || '0' || substr(load_date,4,6)
+  ELSE  substr(load_date,1,10)  
+                end
+  as date format 'dd-mm-yyyy') 
+ FROM lnd_slipstream_telecom.lnd_data_plan_run;
+
+ *** Insert completed. 60 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+3:00 PM 1/25/2021
+
+12:17 PM 1/26/2021
+
+21:36 26-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<Load_cr_transaction.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:11 2021 PID: 18392
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+INSERT INTO cr_slipstream_telecom.cr_transaction ( subscriber_id, plan_type
+, data_consumed, voice_time, sms_used, load_date,run_date)
+SELECT coalesce(d.subscriber_id,v.subscriber_id),
+coalesce(d.plan_type,v.plan_type),
+coalesce(d.data_consumed,0),
+coalesce(v.voice_time,0),
+coalesce(v.sms_used,0),
+coalesce(d.load_date,v.load_date),
+current_date
+FROM stg_slipstream_telecom.stg_data_plan_run d
+full outer JOIN stg_slipstream_telecom.stg_voice_plan_run v ON d.subscribe
+r_id = v.subscriber_id
+and d.load_date = v.load_date;
+
+ *** Insert completed. 90 rows added. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+2:59 PM 1/25/2021
+
+12:16 PM 1/26/2021
+
+21:34 26-01-2021
+
+23:55 26-01-2021
+
+10:23 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<procedures.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:11 2021 PID: 13528
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+.COMPILE FILE = data_consumed.sql;
+
+ *** Procedure has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+.COMPILE FILE = sms_cal.sql;
+
+ *** Procedure has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+.COMPILE FILE = voice_cal.sql;
+
+ *** Procedure has been created. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
++---------+---------+---------+---------+---------+---------+---------+----
+21:37 26-01-2021
+
+21:47 26-01-2021
+
+12:50 27-01-2021
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 2 
+
+C:\Users\al255036\OneDrive - Teradata\Documents\grads Project 2020\slipstream telecom>bteq  0<call_procedures.btq 
+BTEQ 16.20.00.07 (32-bit) Sat Feb 13 15:04:12 2021 PID: 4864
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+*==============================================================================================================*
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                              BILLING IS IN PROCESS......................                                     *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*==============================================================================================================*
+
+
+.LOGON 192.168.77.128/sysdba,
+
+ *** Logon successfully completed.
+ *** Teradata Database Release is 16.20.32.23                   
+ *** Teradata Database Version is 16.20.32.23                     
+ *** Transaction Semantics are BTET.
+ *** Session Character Set Name is 'ASCII'.
+ 
+ *** Total elapsed time was 1 second.
+ 
++---------+---------+---------+---------+---------+---------+---------+----
+
+call voice_cal();
+
+ *** Procedure has been executed. 
+ *** Total elapsed time was 8 seconds.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+call dataConsumed_cal();
+
+ *** Procedure has been executed. 
+ *** Total elapsed time was 7 seconds.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+call sms_cal();
+
+ *** Procedure has been executed. 
+ *** Total elapsed time was 2 seconds.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+
+
+UPDATE cr_Slipstream_Telecom.cr_bill 
+SET total_bill = data_bill+voice_bill+sms_bill;
+
+ *** Update completed. 599 rows changed. 
+ *** Total elapsed time was 1 second.
+
+
++---------+---------+---------+---------+---------+---------+---------+----
+*==============================================================================================================*
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                              ALL SET.......LOOKING GOOD .........                                            *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*                                                                                                              *
+*==============================================================================================================*
+
+
+.LOGOFF;
+ *** You are now logged off from the DBC.
+ *** BTEQ exiting due to EOF on stdin.
+ *** Exiting BTEQ...
+ *** RC (return code) = 0 
